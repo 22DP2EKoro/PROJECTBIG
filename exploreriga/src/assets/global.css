@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+@font-face {
+  font-family: "Font Awesome 6 Free";
+  font-style: normal;
+  font-weight: 900;
+  font-display: block;
+  src: url("/webfonts/fa-solid-900.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Font Awesome 6 Free";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("/webfonts/fa-regular-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Font Awesome 6 Brands";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("/webfonts/fa-brands-400.woff2") format("woff2");
+}
+
+:root {
+  --primary: #991499;
+  --primary-dark: #6b0487;
+  --primary-darker: #3b053d;
+  --primary-glow: rgba(153, 20, 153, 0.18);
+  --text-dark: #1a1a2e;
+  --text-body: #3d3d3d;
+  --text-muted: #6c757d;
+  --bg-light: #faf7fc;
+  --bg-section: #f4f2f7;
+  --white: #ffffff;
+  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.07);
+  --shadow-md: 0 6px 24px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.15);
+  --shadow-purple: 0 8px 30px rgba(153, 20, 153, 0.22);
+  --radius: 12px;
+  --radius-lg: 20px;
+  --transition: 0.3s ease;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+.fa, .fas, .far, .fal, .fab,
+.fa-solid, .fa-regular, .fa-light, .fa-thin, .fa-brands, .fa-duotone {
+  font-family: "Font Awesome 6 Free" !important;
+  font-style: normal;
+}
+.fab, .fa-brands {
+  font-family: "Font Awesome 6 Brands" !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}

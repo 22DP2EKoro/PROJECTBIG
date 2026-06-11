@@ -10,10 +10,12 @@ import RestaurantsView from '@/views/RestaurantsView.vue'
 import CultureView from '@/views/CultureView.vue'
 import TodoView from '@/views/TodoView.vue'
 import SignInView from '@/views/SignInView.vue'
-import AdminDashboard from '@/views/AdminDashboard.vue'; 
+import AdminDashboard from '@/views/AdminDashboard.vue';
 import ContactsView from '@/views/ContactsView.vue'
 import TeamView from '@/views/TeamView.vue'
 import InformationView from '@/views/InformationView.vue'
+import SubmitPlaceView from '@/views/SubmitPlaceView.vue'
+import FavoritesView from '@/views/FavoritesView.vue'
 const routes = [
   {
     path: '/admin',
@@ -21,12 +23,12 @@ const routes = [
     component: AdminDashboard,
     meta: { requiresAuth: true, isAdmin: true }
   },
-  { path: '/', name: 'Home', component: HomeView ,meta: { requiresAuth: true } }, // ✅ Mark route as protected
-  { path: '/museums', name: 'Museums', component: MuseumsView, meta: { requiresAuth: true } }, // ✅ Mark route as protected
+  { path: '/', name: 'Home', component: HomeView}, // ✅ Mark route as protected
+  { path: '/museums', name: 'Museums', component: MuseumsView}, // ✅ Mark route as protected
   
   
-  { path: '/restaurants', name: 'Restaurants', component: RestaurantsView, meta: { requiresAuth: true } }, // ✅ Mark route as protected
-  { path: '/culture', name: 'Culture', component: CultureView, meta: { requiresAuth: true } }, // ✅ Mark route as protected
+  { path: '/restaurants', name: 'Restaurants', component: RestaurantsView}, // ✅ Mark route as protected
+  { path: '/culture', name: 'Culture', component: CultureView}, // ✅ Mark route as protected
   {
     path: '/contacts',
     name: 'Contacts',
@@ -50,6 +52,8 @@ const routes = [
     meta: { requiresAuth: true }, // ✅ Mark route as protected
   },
   { path: '/signin', name: 'SignIn', component: SignInView },
+  { path: '/submit', name: 'SubmitPlace', component: SubmitPlaceView },
+  { path: '/favorites', name: 'Favorites', component: FavoritesView },
 ]
 
 const router = createRouter({

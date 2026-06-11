@@ -5,45 +5,44 @@
       <header class="nav-top"></header>
 
       <form @submit.prevent="handleSubmit">
-        <h2>{{ isRegistering ? 'Register' : 'Login' }}</h2>
+        <h2>{{ isRegistering ? t('signin.register') : t('signin.login') }}</h2>
 
         <div class="input-field">
-          <input
-            id="email"
-            type="text"
-            v-model="email"
-            required
-            placeholder=" "
-          />
-          <label for="email">Enter your email</label>
+          <input id="email" type="text" v-model="email" required placeholder=" " />
+          <label for="email">{{ t('signin.emailLabel') }}</label>
         </div>
 
         <div class="input-field">
-          <input
-            id="password"
-            type="password"
-            v-model="password"
-            required
-            placeholder=" "
-          />
-          <label for="password">Enter your password</label>
+          <input id="password" type="password" v-model="password" required placeholder=" " />
+          <label for="password">{{ t('signin.passwordLabel') }}</label>
         </div>
+        <div v-if="isRegistering && passwordError" class="password-error">
+          {{ passwordError }}
+        </div>
+        <ul v-if="isRegistering" class="password-rules">
+          <li :class="{ met: password.length >= 8 }">Vismaz 8 simboli</li>
+          <li :class="{ met: /[A-Z]/.test(password) }">Vismaz 1 lielais burts</li>
+          <li :class="{ met: /[0-9]/.test(password) }">Vismaz 1 cipars</li>
+        </ul>
 
         <div class="forget">
           <label for="remember">
             <input type="checkbox" id="remember" v-model="rememberMe" />
-            <span>Remember me</span>
+            <span>{{ t('signin.rememberMe') }}</span>
           </label>
-          <a href="#">Forgot password?</a>
+          <a href="#">{{ t('signin.forgotPassword') }}</a>
         </div>
 
-        <button type="submit">{{ isRegistering ? 'Register' : 'Log In' }}</button>
+        <div v-if="errorMsg" class="form-error">
+          <i class="fa fa-circle-exclamation"></i> {{ errorMsg }}
+        </div>
+
+        <button type="submit">{{ isRegistering ? t('signin.registerBtn') : t('signin.loginBtn') }}</button>
 
         <div class="register">
           <p>
-            <span v-if="isRegistering">Already have an account? </span>
-            <span v-else>Don't have an account? </span>
-            <a href="#" @click="toggleForm">{{ isRegistering ? 'Login' : 'Register' }}</a>
+            <span>{{ isRegistering ? t('signin.haveAccount') : t('signin.noAccount') }} </span>
+            <a href="#" @click="toggleForm">{{ isRegistering ? t('signin.loginLink') : t('signin.registerLink') }}</a>
           </p>
         </div>
       </form>
@@ -53,23 +52,46 @@
 
 <script>
 import axios from 'axios'
-import { signIn } from '../auth' // Assuming this sets isAuthenticated
+import { signIn } from '../auth'
+import { useI18n } from '../i18n'
 
 
 export default {
+  setup() {
+    const { t } = useI18n()
+    return { t }
+  },
   data() {
     return {
       email: '',
       password: '',
       rememberMe: false,
       isRegistering: false,
+      passwordError: '',
+      errorMsg: '',
     }
   },
  
  
   methods: {
     async handleSubmit() {
-      console.log('Form submitted with:', this.email, this.password)
+      this.passwordError = ''
+      this.errorMsg = ''
+
+      if (this.isRegistering) {
+        if (this.password.length < 8) {
+          this.passwordError = 'Parolei jābūt vismaz 8 simboliem.'
+          return
+        }
+        if (!/[A-Z]/.test(this.password)) {
+          this.passwordError = 'Parolei jāsatur vismaz viens lielais burts.'
+          return
+        }
+        if (!/[0-9]/.test(this.password)) {
+          this.passwordError = 'Parolei jāsatur vismaz viens cipars.'
+          return
+        }
+      }
 
       try {
         const url = this.isRegistering
@@ -92,10 +114,8 @@ export default {
           msg === 'Registration successful!' ||
           msg === 'Admin login successful!'
         ) {
-          alert(msg)
-
           // Mark user as authenticated
-          signIn({ email: this.email, role })
+          signIn({ email: this.email, role, id: response.data.id })
         
 
           // Redirect based on role
@@ -105,11 +125,11 @@ export default {
             this.$router.push('/')
           }
         } else {
-          alert('Error: ' + msg)
+          this.errorMsg = msg
         }
       } catch (error) {
         console.error('There was an error with the request!', error)
-        alert('Server error. Try again later.')
+        this.errorMsg = 'Servera kļūda. Mēģini vēlāk.'
       }
     },
     toggleForm() {
@@ -235,5 +255,50 @@ button:hover {
   text-align: center;
   margin-top: 30px;
   color: #fff;
+}
+.form-error {
+  background: rgba(255, 80, 80, 0.15);
+  border: 1px solid rgba(255, 120, 120, 0.4);
+  border-radius: 8px;
+  color: #ffaaaa;
+  font-size: 13px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.password-error {
+  color: #ffaaaa;
+  font-size: 13px;
+  margin: -8px 0 8px;
+}
+.password-rules {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.password-rules li {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  padding-left: 18px;
+  position: relative;
+}
+.password-rules li::before {
+  content: '✗';
+  position: absolute;
+  left: 0;
+  color: #ff8080;
+}
+.password-rules li.met {
+  color: rgba(255,255,255,0.85);
+}
+.password-rules li.met::before {
+  content: '✓';
+  color: #80ffb0;
 }
 </style>

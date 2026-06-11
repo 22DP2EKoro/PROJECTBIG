@@ -1,58 +1,49 @@
 <template>
-    <div class="team-page">
-      <div class="team-header">
-        <h1>Meet Our Team</h1>
-      </div>
-  
-      <!-- Team Section -->
-      <div class="team-section">
-        <!-- Director -->
-        <div class="team-member">
-          <img
-            src="/workspaces/PROJECTBIG/exploreriga/public/es1.jpeg"
-            alt="Director"
-            class="team-member-photo"
-          />
-          <div class="team-member-info">
-            <h3>Ervins Korolkovs</h3>
-            <p class="position">Director</p>
-            <p class="bio">Ervins is responsible for overseeing the company's overall operations and strategic direction. With over 20 years of experience in the industry, he brings a wealth of expertise.</p>
-          </div>
+  <div class="team-page">
+    <div class="team-header">
+      <a href="/" class="brand">ExploreRiga</a>
+      <h1>{{ t('team.title') }}</h1>
+      <p>{{ t('team.subtitle') }}</p>
+    </div>
+
+    <div class="team-section">
+      <div class="team-member">
+        <div class="member-photo-wrap">
+          <img src="/es1.jpeg" alt="Director" class="team-member-photo" />
         </div>
-  
-        <!-- CEO -->
-        <div class="team-member">
-          <img
-            src="/workspaces/PROJECTBIG/exploreriga/public/es2.webp "
-            alt="CEO"
-            class="team-member-photo"
-          />
-          <div class="team-member-info">
-            <h3>Ervins Korolkovs</h3>
-            <p class="position">CEO</p>
-            <p class="bio">Ervins leads the company with a vision to innovate and grow. Heisommitted to creating a culture of excellence and empowering her team to achieve great things.</p>
-          </div>
-        </div>
-  
-        <!-- Founder -->
-        <div class="team-member">
-          <img
-            src="/workspaces/PROJECTBIG/exploreriga/public/es3.webp"
-            alt="Founder"
-            class="team-member-photo"
-          />
-          <div class="team-member-info">
-            <h3>Ervins Korolkovs</h3>
-            <p class="position">Founder</p>
-            <p class="bio">Ervins founded the company with a passion for creating impactful solutions. With an entrepreneurial spirit, Ervinsbeen the driving force behind the company's growth and success.</p>
-          </div>
+        <div class="team-member-info">
+          <h3>Ervins Korolkovs</h3>
+          <p class="position">{{ t('team.pos_director') }}</p>
+          <p class="bio">{{ t('team.bio_director') }}</p>
         </div>
       </div>
-  
-      <!-- Footer Section -->
-      <footer>
+
+      <div class="team-member">
+        <div class="member-photo-wrap">
+          <img src="/es2.webp" alt="CEO" class="team-member-photo" />
+        </div>
+        <div class="team-member-info">
+          <h3>Ervins Korolkovs</h3>
+          <p class="position">{{ t('team.pos_ceo') }}</p>
+          <p class="bio">{{ t('team.bio_ceo') }}</p>
+        </div>
+      </div>
+
+      <div class="team-member">
+        <div class="member-photo-wrap">
+          <img src="/es3.webp" alt="Founder" class="team-member-photo" />
+        </div>
+        <div class="team-member-info">
+          <h3>Ervins Korolkovs</h3>
+          <p class="position">{{ t('team.pos_founder') }}</p>
+          <p class="bio">{{ t('team.bio_founder') }}</p>
+        </div>
+      </div>
+    </div>
+
+    <footer>
       <div class="footer-content">
-        <p>&copy; 2024 ExploreRiga. Visas tiesības aizsargātas.</p>
+        <p>&copy; 2024 ExploreRiga. All rights reserved.</p>
         <div class="social-links">
           <a href="https://www.facebook.com" target="_blank">Facebook</a> |
           <a href="https://www.twitter.com" target="_blank">Twitter</a> |
@@ -60,106 +51,157 @@
         </div>
       </div>
     </footer>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    name: 'TeamPage',
-  };
-  </script>
-  
-  <style scoped>
-  .team-page {
-    font-family: Arial, sans-serif;
-  }
-  
-  .team-header {
-    background-color: #4e086e;
-    color: white;
-    text-align: center;
-    padding: 50px;
-  }
-  
-  .team-header h1 {
-    margin: 0;
-    font-size: 36px;
-  }
-  
-  .team-section {
-    display: flex;
-    justify-content: space-around;
-    padding: 50px;
-    background-color: #f8f8f8;
-    flex-wrap: wrap;
-  }
-  
-  .team-member {
-    width: 30%;
-    margin: 20px 0;
-    text-align: center;
-  }
-  
-  .team-member-photo {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-  
-  .team-member-info {
-    margin-top: 20px;
-  }
-  
-  .team-member h3 {
-    font-size: 24px;
-    margin-bottom: 10px;
-  }
-  
-  .position {
-    font-style: italic;
-    color: #7f8c8d;
-    margin-bottom: 10px;
-  }
-  
-  .bio {
-    font-size: 16px;
-    color: #2c3e50;
-  }
-  
-  footer {
-  background-color: #333;
-  color: #fff;
-  padding: 20px 0;
-  text-align: center;
-  position: relative;
-  bottom: 0;
-  width: 100%;
+  </div>
+</template>
+
+<script>
+import { useI18n } from '../i18n'
+
+export default {
+  name: 'TeamPage',
+  setup() {
+    const { t } = useI18n()
+    return { t }
+  },
+};
+</script>
+
+<style scoped>
+* {
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.footer-content {
+h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+.team-page { background: #faf7fc; min-height: 100vh; }
+
+/* ── Header ── */
+.team-header {
+  background: linear-gradient(135deg, #3b053d 0%, #6b0487 100%);
+  color: white;
+  text-align: center;
+  padding: 60px 24px 50px;
+  position: relative;
+}
+
+.brand {
+  position: absolute;
+  top: 24px;
+  left: 32px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  letter-spacing: -0.2px;
+}
+
+.brand:hover { color: #fff; }
+
+.team-header h1 {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.team-header p {
+  font-size: 17px;
+  color: rgba(255,255,255,0.75);
+  font-weight: 300;
+}
+
+/* ── Team grid ── */
+.team-section {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  padding: 64px 5%;
+  flex-wrap: wrap;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.footer-content p {
-  margin: 0;
-  font-size: 14px;
-  color: #ffffff;
+.team-member {
+  flex-basis: 280px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 28px rgba(0,0,0,0.09);
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
 
+.team-member:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 48px rgba(107,4,135,0.15);
+}
+
+.member-photo-wrap {
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+}
+
+.team-member-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  transition: transform 0.4s;
+}
+
+.team-member:hover .team-member-photo { transform: scale(1.04); }
+
+.team-member-info {
+  padding: 24px 20px 28px;
+}
+
+.team-member-info h3 {
+  font-size: 22px;
+  color: #1a1a2e;
+  margin-bottom: 6px;
+}
+
+.position {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #991499;
+  margin-bottom: 14px;
+}
+
+.bio {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.65;
+}
+
+/* ── Footer ── */
+footer {
+  background: linear-gradient(135deg, #1a001a 0%, #2d003a 100%);
+  color: #fff;
+  padding: 28px 5%;
+  text-align: center;
+}
+
+.footer-content { max-width: 1200px; margin: 0 auto; }
+
+.footer-content p {
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 8px;
 }
 
 .social-links a {
-  color: #fff;
+  color: rgba(255,255,255,0.7);
   text-decoration: none;
   margin: 0 10px;
-  transition: color 0.3s ease;
+  font-size: 14px;
+  transition: color 0.2s;
 }
 
-.social-links a:hover {
-  color: #00aced;
-}
-
-
-  </style>
-  
+.social-links a:hover { color: #e8a0e8; }
+</style>

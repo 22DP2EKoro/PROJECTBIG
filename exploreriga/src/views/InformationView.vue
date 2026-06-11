@@ -1,44 +1,37 @@
 <template>
-    <div class="about-page">
-      <header class="about-header">
-        <h1>About ExploreRiga</h1>
-      </header>
-  
-      <section class="about-content">
-        <p>
-          Welcome to <strong>ExploreRiga</strong> – your ultimate companion to discovering the rich culture,
-          vibrant lifestyle, and hidden gems of Riga, Latvia. Our mission is to make your visit
-          or stay in Riga unforgettable.
-        </p>
-        <p>
-          Whether you're a tourist, local, or expat, ExploreRiga offers curated recommendations
-          on sights, events, food, and experiences that showcase the true spirit of the city.
-        </p>
-        <p>
-          We are a passionate team of locals who believe in promoting the beauty and uniqueness
-          of Riga to the world. From historical landmarks to modern-day adventures, ExploreRiga
-          connects you with the heart of the city.
-        </p>
-      </section>
-  
-      <section class="about-values">
-        <h2>Our Vision</h2>
-        <p>
-          To become the most trusted and inspiring local guide for anyone looking to experience Riga in an authentic way.
-        </p>
-  
-        <h2>Why Choose Us?</h2>
-        <ul>
-          <li>Curated local experiences</li>
-          <li>Up-to-date information</li>
-          <li>Multilingual support</li>
-          <li>Passionate and experienced team</li>
-        </ul>
-      </section>
-  
-     <footer>
+  <div class="info-page">
+    <div class="info-header">
+      <a href="/" class="brand">ExploreRiga</a>
+      <h1>{{ t('info.title') }}</h1>
+    </div>
+
+    <section class="info-content">
+      <p v-html="t('info.p1')"></p>
+      <p>{{ t('info.p2') }}</p>
+      <p>{{ t('info.p3') }}</p>
+    </section>
+
+    <section class="info-values">
+      <div class="values-inner">
+        <div class="value-block">
+          <h2>{{ t('info.visionTitle') }}</h2>
+          <p>{{ t('info.visionText') }}</p>
+        </div>
+        <div class="value-block">
+          <h2>{{ t('info.whyTitle') }}</h2>
+          <ul>
+            <li><i class="fa fa-check-circle"></i> {{ t('info.why1') }}</li>
+            <li><i class="fa fa-check-circle"></i> {{ t('info.why2') }}</li>
+            <li><i class="fa fa-check-circle"></i> {{ t('info.why3') }}</li>
+            <li><i class="fa fa-check-circle"></i> {{ t('info.why4') }}</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <footer>
       <div class="footer-content">
-        <p>&copy; 2024 ExploreRiga. Visas tiesības aizsargātas.</p>
+        <p>{{ t('footer.copyright') }}</p>
         <div class="social-links">
           <a href="https://www.facebook.com" target="_blank">Facebook</a> |
           <a href="https://www.twitter.com" target="_blank">Twitter</a> |
@@ -46,85 +39,112 @@
         </div>
       </div>
     </footer>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    name: 'AboutPage',
-  };
-  </script>
-  
-  <style scoped>
-  .about-page {
-    font-family: Arial, sans-serif;
-    padding: 0px;
-    color: #2c3e50;
-  }
-  
-  .about-header {
-    background-color: #4e086e;
-    color: white;
-    padding: 40px;
-    text-align: center;
-  }
-  
-  .about-content {
-    margin: 40px auto;
-    max-width: 800px;
-    font-size: 18px;
-    line-height: 1.6;
-  }
-  
-  .about-values {
-    background-color: #f4f4f4;
-    padding: 30px;
-    margin: 40px auto;
-    max-width: 800px;
-    border-radius: 10px;
-  }
-  
-  .about-values h2 {
-    color: #4e086e;
-    margin-top: 20px;
-  }
-  
-  .about-values ul {
-    list-style-type: disc;
-    padding-left: 20px;
-  }
-  footer {
-  background-color: #333;
-  color: #fff;
-  padding: 20px 0;
+  </div>
+</template>
+
+<script>
+import { useI18n } from '../i18n'
+
+export default {
+  name: 'AboutPage',
+  setup() {
+    const { t } = useI18n()
+    return { t }
+  },
+}
+</script>
+
+<style scoped>
+* { font-family: 'Inter', sans-serif; box-sizing: border-box; margin: 0; padding: 0; }
+h1, h2 { font-family: 'Playfair Display', serif; }
+
+.info-page { background: #faf7fc; min-height: 100vh; }
+
+.info-header {
+  background: linear-gradient(135deg, #3b053d 0%, #6b0487 100%);
+  color: white;
   text-align: center;
+  padding: 60px 24px 50px;
   position: relative;
-  bottom: 0;
-  width: 100%;
 }
 
-.footer-content {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.footer-content p {
-  margin: 0;
-  font-size: 14px;
-  color: #ffffff;
-
-}
-
-.social-links a {
-  color: #fff;
+.brand {
+  position: absolute;
+  top: 24px;
+  left: 32px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.85);
   text-decoration: none;
-  margin: 0 10px;
-  transition: color 0.3s ease;
+}
+.brand:hover { color: #fff; }
+
+.info-header h1 { font-size: 48px; }
+
+.info-content {
+  max-width: 800px;
+  margin: 56px auto;
+  padding: 0 5%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.social-links a:hover {
-  color: #00aced;
+.info-content p {
+  font-size: 17px;
+  line-height: 1.75;
+  color: #333;
 }
 
-  </style>
-  
+.info-values {
+  background: #fff;
+  padding: 56px 5%;
+}
+
+.values-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+
+.value-block { flex: 1; min-width: 260px; }
+
+.value-block h2 {
+  font-size: 26px;
+  color: #3b053d;
+  margin-bottom: 16px;
+}
+
+.value-block p { font-size: 16px; color: #444; line-height: 1.7; }
+
+.value-block ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+
+.value-block li {
+  font-size: 15px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.value-block li .fa {
+  color: #991499;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+footer {
+  background: linear-gradient(135deg, #1a001a 0%, #2d003a 100%);
+  color: #fff;
+  padding: 28px 5%;
+  text-align: center;
+  margin-top: 64px;
+}
+.footer-content { max-width: 1200px; margin: 0 auto; }
+.footer-content p { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
+.social-links a { color: rgba(255,255,255,0.7); text-decoration: none; margin: 0 10px; font-size: 14px; transition: color 0.2s; }
+.social-links a:hover { color: #e8a0e8; }
+</style>

@@ -9,7 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.2.0",
     "axios": "^1.9.0",
+    "bootstrap": "^5.3.3",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "leaflet": "^1.9.4",
+    "mysql2": "^3.14.1",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   },
@@ -17,5 +23,10 @@
     "@vitejs/plugin-vue": "^5.2.3",
     "vite": "^6.2.4",
     "vite-plugin-vue-devtools": "^7.7.2"
-  }
+  },
+  "main": "vite.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

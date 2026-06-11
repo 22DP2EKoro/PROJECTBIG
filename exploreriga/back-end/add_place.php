@@ -1,82 +1,58 @@
 <?php
-// CORS iestatījumi
-header("Access-Control-Allow-Origin: http://127.0.0.1:5173");
+// CORS headers
+$allowed_origins = ['http://localhost:5173', 'http://127.0.0.1:5173'];
+if (isset($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], $allowed_origins)) {
+    header("Access-Control-Allow-Origin: " . $_SERVER['HTTP_ORIGIN']);
+} else {
+    header("Access-Control-Allow-Origin: *");
+}
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Headers: Content-Type");
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
 
-echo json_encode(["status" => "success"]);
-
-// DB konfigurācija
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "user_auth";
-
-// Savienojums ar DB
-$conn = new mysqli($servername, $username, $password, $dbname);
+// DB connection
+$conn = new mysqli("localhost", "root", "", "user_auth");
 if ($conn->connect_error) {
-    echo json_encode(["success" => false, "message" => "Connection failed: " . $conn->connect_error]);
-    exit;
+    http_response_code(500);
+    echo json_encode(["error" => "DB connect failed: " . $conn->connect_error]);
+    exit();
 }
 
-// Ievades datu nolasīšana
 $data = json_decode(file_get_contents("php://input"), true);
 
-// Validācija
-if (empty($data['name']) || empty($data['address'])) {
-    echo json_encode(["success" => false, "message" => "Name and address are required fields."]);
-    $conn->close();
-    exit;
+error_log("Received data: " . print_r($data, true));
+
+if (!$data || !isset($data['name'], $data['description'], $data['address'])) {
+    http_response_code(400);
+    echo json_encode(["error" => "Invalid input"]);
+    exit();
 }
 
-// Sākam transakciju
-$conn->begin_transaction();
+$facts = $data['facts'] ?? "";
 
-try {
-    // 1. Ievietojam pamatdatus objects tabulā
-    $stmt = $conn->prepare("INSERT INTO objects (name, description, address) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $data['name'], $data['description'] ?? '', $data['address']);
-    
-    if (!$stmt->execute()) {
-        throw new Exception("Error saving object data: " . $stmt->error);
-    }
-    
-    $objects_id = $conn->insert_id;
-    $stmt->close();
+$stmt = $conn->prepare("INSERT INTO objects (name, description, address) VALUES (?, ?, ?)");
+$stmt->bind_param("sss", $data['name'], $data['description'], $data['address']);
+if (!$stmt->execute()) {
+    http_response_code(500);
+    echo json_encode(["error" => "Insert into objects failed: " . $stmt->error]);
+    exit();
+}
+$object_id = $conn->insert_id;
+$stmt->close();
 
-    // 2. Ievietojam vietas specifiskos datus place tabulā
-    $stmt = $conn->prepare("INSERT INTO place (objects_id, facts) VALUES (?, ?)");
-    $stmt->bind_param("is", $objects_id, $data['facts'] ?? '');
-    
-    if (!$stmt->execute()) {
-        throw new Exception("Error saving place data: " . $stmt->error);
-    }
-    
-    $stmt->close();
-
-    // Ja viss izdevās, commit transakciju
-    $conn->commit();
-    
-    echo json_encode([
-        "success" => true,
-        "message" => "Place successfully added!",
-        "objects_id" => $objects_id
-    ]);
-    
-} catch (Exception $e) {
-    // Ja kļūda, rollback transakciju
-    $conn->rollback();
-    
-    echo json_encode([
-        "success" => false,
-        "message" => "Database error: " . $e->getMessage()
-    ]);
+$stmt2 = $conn->prepare("INSERT INTO place (objects_id, facts) VALUES (?, ?)");
+$stmt2->bind_param("is", $object_id, $facts);
+if ($stmt2->execute()) {
+    echo json_encode(["success" => true, "objects_id" => $object_id]);
+} else {
+    error_log("Insert into places failed: " . $stmt2->error);
+    http_response_code(500);
+    echo json_encode(["error" => "Insert into places failed: " . $stmt2->error]);
 }
 
+$stmt2->close();
 $conn->close();
-?>

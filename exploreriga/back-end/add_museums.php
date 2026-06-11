@@ -1,81 +1,73 @@
 <?php
-header("Access-Control-Allow-Origin: http://127.0.0.1:5173");
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
+// 🟢 MUST BE AT THE VERY TOP - BEFORE ANY HTML OR OUTPUT
+$allowed_origins = [
+    'http://localhost:5173',
+    'http://127.0.0.1:5173'
+];
 
+if (isset($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], $allowed_origins)) {
+    header("Access-Control-Allow-Origin: " . $_SERVER['HTTP_ORIGIN']);
+} else {
+    header("Access-Control-Allow-Origin: *");  // You can restrict this in production
+}
+
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+
+// ✅ Always handle OPTIONS preflight first
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
 
-echo json_encode(["status" => "success"]);
+// Database connection
+$conn = new mysqli("localhost", "root", "", "user_auth");
 
-// DB konfigurācija
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "user_auth";
-
-// Savienojums ar DB
-$conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
-    echo json_encode(["success" => false, "message" => "Connection failed: " . $conn->connect_error]);
-    exit;
+    http_response_code(500);
+    echo json_encode(["error" => "Database connection failed: " . $conn->connect_error]);
+    exit();
 }
 
-// Ievades datu nolasīšana
+// Get JSON input
 $data = json_decode(file_get_contents("php://input"), true);
 
-// Validācija
-if (empty($data['name']) || empty($data['address'])) {
-    echo json_encode(["success" => false, "message" => "Name and address are required fields."]);
+// Validate input
+if (
+    !$data ||
+    !isset($data['name'], $data['description'], $data['address'], $data['work_hours'])
+) {
+    http_response_code(400);
+    echo json_encode(["error" => "Missing required fields"]);
+    exit();
+}
+
+// Insert into objects
+$stmt1 = $conn->prepare("INSERT INTO objects (name, description, address) VALUES (?, ?, ?)");
+$stmt1->bind_param("sss", $data['name'], $data['description'], $data['address']);
+
+if (!$stmt1->execute()) {
+    http_response_code(500);
+    echo json_encode(["error" => "Insert into objects failed: " . $stmt1->error]);
+    $stmt1->close();
     $conn->close();
-    exit;
+    exit();
 }
 
-// Sākam transakciju
-$conn->begin_transaction();
+$objects_id = $conn->insert_id;
+$stmt1->close();
 
-try {
-    // 1. Ievietojam pamatdatus objects tabulā
-    $stmt = $conn->prepare("INSERT INTO objects (name, description, address) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $data['name'], $data['description'] ?? '', $data['address']);
-    
-    if (!$stmt->execute()) {
-        throw new Exception("Error saving object data: " . $stmt->error);
-    }
-    
-    $objects_id = $conn->insert_id;
-    $stmt->close();
+// Insert into museums
+$stmt2 = $conn->prepare("INSERT INTO museums (objects_id, work_hours) VALUES (?, ?)");
+$stmt2->bind_param("is", $objects_id, $data['work_hours']);
 
-    // 2. Ievietojam muzeja specifiskos datus museums tabulā
-    $stmt = $conn->prepare("INSERT INTO museums (objects_id, work_hours) VALUES (?, ?)");
-    $stmt->bind_param("is", $objects_id, $data['work_hours'] ?? '');
-    
-    if (!$stmt->execute()) {
-        throw new Exception("Error saving museum data: " . $stmt->error);
-    }
-    
-    $stmt->close();
-
-    // Ja viss izdevās, commit transakciju
-    $conn->commit();
-    
-    echo json_encode([
-        "success" => true,
-        "message" => "Museum successfully added!",
-        "objects_id" => $objects_id
-    ]);
-    
-} catch (Exception $e) {
-    // Ja kļūda, rollback transakciju
-    $conn->rollback();
-    
-    echo json_encode([
-        "success" => false,
-        "message" => "Database error: " . $e->getMessage()
-    ]);
+if (!$stmt2->execute()) {
+    http_response_code(500);
+    echo json_encode(["error" => "Insert into museums failed: " . $stmt2->error]);
+} else {
+    echo json_encode(["success" => true, "objects_id" => $objects_id]);
 }
 
+$stmt2->close();
 $conn->close();
 ?>

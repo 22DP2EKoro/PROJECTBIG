@@ -1,0 +1,168 @@
+{
+    "culture": {
+        "47": [
+            {
+                "comment": "valid",
+                "rating": 5
+            },
+            {
+                "comment": "valid",
+                "rating": 5
+            }
+        ],
+        "45": [
+            {
+                "comment": "kkkkkkkkk",
+                "rating": 5
+            },
+            {
+                "comment": "loti labs",
+                "rating": 4
+            }
+        ],
+        "43": [
+            {
+                "comment": "lll",
+                "rating": 4
+            }
+        ],
+        "28": [
+            {
+                "comment": "llllllllllllllllllllllllllllllllll",
+                "rating": 5
+            }
+        ],
+        "25": [
+            {
+                "comment": "opppppppppppppppppppppp",
+                "rating": 5
+            },
+            {
+                "comment": "mans milakasi",
+                "rating": 5
+            }
+        ]
+    },
+    "restaurant": {
+        "29": [
+            {
+                "comment": "l",
+                "rating": 4
+            }
+        ],
+        "25": [
+            {
+                "comment": "bbv",
+                "rating": 5
+            },
+            {
+                "comment": "k",
+                "rating": 3
+            }
+        ],
+        "32": [
+            {
+                "comment": "k",
+                "rating": 2
+            },
+            {
+                "comment": "ll",
+                "rating": 4
+            }
+        ],
+        "15": [
+            {
+                "comment": "mega labs burgeris",
+                "rating": 5
+            }
+        ],
+        "14": [
+            {
+                "comment": "looooooooooo",
+                "rating": 1
+            }
+        ],
+        "17": [
+            {
+                "comment": "ppppppppppppp",
+                "rating": 4
+            }
+        ],
+        "18": [
+            {
+                "comment": "ok",
+                "rating": 5
+            }
+        ]
+    },
+    "museum": {
+        "40": [
+            {
+                "comment": "ggfg",
+                "rating": 4
+            },
+            {
+                "comment": "ggfg",
+                "rating": 3
+            },
+            {
+                "comment": "ggfg",
+                "rating": 3
+            },
+            {
+                "comment": "ggfg",
+                "rating": 3
+            },
+            {
+                "comment": "ggfg",
+                "rating": 3
+            },
+            {
+                "comment": "ggfg",
+                "rating": 3
+            },
+            {
+                "comment": "ggfg",
+                "rating": 3
+            },
+            {
+                "comment": "ggfg",
+                "rating": 3
+            },
+            {
+                "comment": "ggfg",
+                "rating": 3
+            },
+            {
+                "comment": "ggfg",
+                "rating": 3
+            },
+            {
+                "comment": "ggfg",
+                "rating": 3
+            },
+            {
+                "comment": "ggfg",
+                "rating": 3
+            },
+            {
+                "comment": "ggfg",
+                "rating": 3
+            },
+            {
+                "comment": "ggfg",
+                "rating": 3
+            },
+            {
+                "comment": "ggfg",
+                "rating": 3
+            }
+        ],
+        "12": [
+            {
+                "comment": "ok",
+                "rating": 5
+            }
+        ]
+    }
+}
