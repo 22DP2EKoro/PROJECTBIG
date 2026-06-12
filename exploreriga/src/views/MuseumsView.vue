@@ -65,7 +65,7 @@
           <img :src="museum.image" :alt="museum.name" />
           <a :href="museum.link" class="visit-button" target="_blank">{{ t('museums.visitWebsite') }}</a>
         </div>
-        <div class="text-box">
+        <div class="text-box" :class="{ 'text-left': index % 2 !== 0 }">
           <h3>{{ museum.name }}</h3>
           <p>{{ museum.description }}</p>
           <p>{{ museum.address }}</p>
@@ -230,16 +230,15 @@ export default {
       reviewError: '',
       selectedForRoute: [],
       museums: [
-        { id: '1',  name: 'Mākslas muzejs', description: 'Mākslas muzejs piedāvā plašu izstāžu klāstu. Apmeklē un atklāj jaunas mākslas pasaules!', address: 'Jaņa Rozentāla laukums 1, Rīga, LV-1010', openingHours: 'Darba laiks: P. slēgts, O.–Sv. 11:00–18:00', image: '/museums/makslasmuzeijs.jpg', link: 'https://www.lnmm.lv/', lat: 56.9541, lng: 24.1170 },
-        { id: '2',  name: 'Kara muzejs', description: 'Kara muzejs piedāvā plašu izstāžu klāstu. Apmeklē un atklāj jaunas mākslas pasaules!', address: 'Smilšu iela 20, Rīga, LV-1050', openingHours: 'Darba laiks: Katru dienu 10:00–17:00', image: '/museums/karamuzejs.jpg', link: 'https://www.karamuzejs.lv/', lat: 56.9494, lng: 24.1116 },
+        { id: '2',  name: 'Kara muzejs', description: 'Kara muzejs piedāvā plašu izstāžu klāstu. Apmeklē un atklāj jaunas mākslas pasaules!', address: 'Smilšu iela 20, Rīga, LV-1050', openingHours: 'Darba laiks: Katru dienu 10:00–17:00', image: 'https://images.pexels.com/photos/33903918/pexels-photo-33903918.jpeg?auto=compress&cs=tinysrgb&w=800', link: 'https://www.karamuzejs.lv/', lat: 56.9494, lng: 24.1116 },
         { id: '3',  name: 'Dabas muzejs', description: 'Dabas muzejs piedāvā plašu izstāžu klāstu. Apmeklē un atklāj jaunas mākslas pasaules!', address: 'Krišjāņa Barona iela 4, Rīga, LV-1050', openingHours: 'Darba laiks: P. slēgts, O.–S. 10:00–17:00, Sv. 11:00–17:00', image: '/museums/dabasmuzejs.jpg', link: 'https://www.dabasmuzejs.gov.lv/lv', lat: 56.9519, lng: 24.1136 },
         { id: '4',  name: 'Paula Stradiņa Medicīnas vēstures muzejs', description: 'Paula Stradiņa Medicīnas vēstures muzejs ir unikāls muzejs, kas piedāvā plašu izstāžu klāstu par medicīnas vēsturi un attīstību.', address: 'Antonijas iela 1, Rīga, LV-1010', openingHours: 'Darba laiks: P. slēgts, O.–Sv. 10:00–17:00', image: '/museums/stradini.jpg', link: 'https://www.stradini.lv/', lat: 56.9527, lng: 24.1131 },
         { id: '5',  name: 'Dekoratīvās mākslas un dizaina muzejs', description: 'Muzejs iepazīstina sabiedrību ar aktuālākajām dizaina un dekoratīvās mākslas tendencēm Latvijā un pasaulē un rosina diskusiju par jomas attīstību.', address: 'Skārņu iela 10/20, Rīga, LV-1050', openingHours: 'Darba laiks: O.–Sv. 11:00–18:00, P. slēgts', image: '/museums/dmdmuzejs.jpg', link: 'https://lnmm.gov.lv/dekorativas-makslas-un-dizaina-muzejs', lat: 56.9479, lng: 24.1072 },
         { id: '6',  name: 'Rīgas Motormuzejs', description: 'Rīgas Motormuzejs ir unikāls muzejs, kas piedāvā plašu izstāžu klāstu par automobiļu vēsturi un attīstību.', address: 'Sergeja Eizenšteina iela 8, Rīga, LV-1079', openingHours: 'Darba laiks: Katru dienu 10:00–18:00', image: '/museums/motormuzejs.jpg', link: 'https://www.motormuzejs.lv/', lat: 56.9210, lng: 24.1570 },
         { id: '7', name: 'Latvijas Nacionālais mākslas muzejs', description: 'Latvijas Nacionālais mākslas muzejs ir lielākā profesionālās mākslas krātuve Latvijā ar plašu latviešu mākslas kolekciju.', address: 'Jaņa Rozentāla laukums 1, Rīga, LV-1010', openingHours: 'Darba laiks: O.–Sv. 10:00–18:00, P. slēgts', image: '/museums/lnmm.jpg', link: 'https://www.lnmm.lv/', lat: 56.9541, lng: 24.1170 },
         { id: '8', name: 'Latvijas Etnogrāfiskais brīvdabas muzejs', description: 'Viens no vecākajiem brīvdabas muzejiem Eiropā, kas parāda tradicionālo Latvijas lauku dzīvi.', address: 'Brīvības gatve 440, Rīga, LV-1024', openingHours: 'Darba laiks: Katru dienu 10:00–17:00', image: '/museums/brivdabas.jpg', link: 'https://brivdabasmuzejs.lv/', lat: 56.9796, lng: 24.2112 },
-        { id: '9', name: 'Rīgas Biržas mākslas muzejs', description: 'Muzejs ar bagātīgu pasaules mākslas kolekciju – Āzijas, Eiropas un antīkās mākslas darbi.', address: 'Doma laukums 6, Rīga, LV-1050', openingHours: 'Darba laiks: O.–Sv. 10:00–17:00, P. slēgts', image: '/museums/birza.jpg', link: 'https://www.lnmm.lv/birzas-nams', lat: 56.9487, lng: 24.1050 },
-        { id: '10', name: 'Rīgas vēstures un kuģniecības muzejs', description: 'Viens no vecākajiem muzejiem Eiropā, kas atspoguļo Rīgas un Latvijas vēsturi.', address: 'Palasta iela 4, Rīga, LV-1050', openingHours: 'Darba laiks: O.–Sv. 10:00–17:00, P. slēgts', image: '/museums/vesturesmuzejs.jpg', link: 'https://www.rigamuz.lv/rhvm/', lat: 56.9481, lng: 24.1066 },
+        { id: '9', name: 'Rīgas Biržas mākslas muzejs', description: 'Muzejs ar bagātīgu pasaules mākslas kolekciju – Āzijas, Eiropas un antīkās mākslas darbi.', address: 'Doma laukums 6, Rīga, LV-1050', openingHours: 'Darba laiks: O.–Sv. 10:00–17:00, P. slēgts', image: '/museums/birza.jpg', link: 'https://lnmm.gov.lv/makslas-muzejs-rigas-birza', lat: 56.9487, lng: 24.1050 },
+        { id: '10', name: 'Rīgas vēstures un kuģniecības muzejs', description: 'Viens no vecākajiem muzejiem Eiropā, kas atspoguļo Rīgas un Latvijas vēsturi.', address: 'Palasta iela 4, Rīga, LV-1050', openingHours: 'Darba laiks: O.–Sv. 10:00–17:00, P. slēgts', image: '/museums/vesturesmuzejs.jpg', link: 'https://www.rigamuz.lv/rvkm/', lat: 56.9481, lng: 24.1066 },
         { id: '11', name: 'Latvijas Okupācijas muzejs', description: 'Muzejs par Latvijas okupācijas vēsturi 20. gadsimtā.', address: 'Latviešu strēlnieku laukums 1, Rīga, LV-1050', openingHours: 'Darba laiks: Katru dienu 10:00–18:00', image: '/museums/okupacijas.jpg', link: 'https://okupacijasmuzejs.lv/', lat: 56.9477, lng: 24.1082 },
         { id: '12', name: 'Zuzeum mākslas centrs', description: 'Mūsdienu mākslas centrs ar Latvijas un starptautisko laikmetīgo mākslu.', address: 'Lāčplēša iela 101, Rīga, LV-1011', openingHours: 'Darba laiks: Tre.–Sv. 11:00–19:00, P.–O. slēgts', image: '/museums/zuzeum.jpg', link: 'https://www.zuzeum.com/', lat: 56.9450, lng: 24.1260 },
       ],
@@ -297,7 +296,7 @@ export default {
     },
     hideMenu() {
       const navLinks = document.getElementById('navLinks')
-      if (navLinks) navLinks.style.right = '-200px'
+      if (navLinks) navLinks.style.right = '-240px'
     },
     toggleDropdown(event) {
       event.preventDefault()
@@ -586,7 +585,8 @@ p {
 .places-col {
   flex-basis: 35%;
   min-width: 240px;
-  align-self: stretch;
+  height: 280px;
+  flex-shrink: 0;
   overflow: hidden;
   position: relative;
 }
@@ -594,8 +594,8 @@ p {
 .places-col img {
   width: 100%;
   height: 100%;
-  min-height: 280px;
   object-fit: cover;
+  object-position: center;
   display: block;
   transition: transform 0.4s;
 }
@@ -630,6 +630,13 @@ p {
   flex: 1;
   padding: 28px 28px 28px 0;
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.text-box.text-left {
+  padding: 28px 0 28px 28px;
 }
 
 .text-box h3 {
@@ -1168,10 +1175,12 @@ footer {
   .places-col {
     flex-basis: 100%;
     min-width: unset;
+    width: 100%;
+    height: 220px;
   }
 
   .places-col img {
-    min-height: 220px;
+    width: 100%;
   }
 
   .text-box {
@@ -1179,7 +1188,7 @@ footer {
   }
 
   h1 {
-    font-size: 46px;
+    font-size: 40px;
   }
 
   .nav-links {
@@ -1192,6 +1201,7 @@ footer {
     text-align: left;
     z-index: 1000;
     transition: 0.4s;
+    overflow-y: auto;
   }
 
   .nav-links ul li {
@@ -1207,6 +1217,32 @@ footer {
     color: #fff;
     font-size: 22px;
     cursor: pointer;
+  }
+
+  .nav-links .fa-times {
+    display: block;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 20px 20px 0;
+  }
+
+  .route-card {
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .route-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .search-input {
+    width: 95%;
+  }
+
+  .museum-map {
+    height: 280px;
   }
 }
 </style>

@@ -268,7 +268,7 @@ const restaurantRows = [
       description: 'Restorāns Riviera radīts pēc Vidusjūras virtuves labākajām tradīcijām. Īpaša vieta ar patīkamu atmosfēru un autentiskiem Vidusjūras ēdieniem.',
       address: 'Dzirnavu iela 31, Rīga, LV-1010',
       avgprice: 'Vidējā cena: 25€',
-      link: 'http://rivierarestorans.lv/en/',
+      link: 'https://rivierarestorans.lv/',
       lat: 56.9490, lng: 24.1055,
     },
     {
@@ -1119,7 +1119,7 @@ footer {
 
 /* ── Mobile ── */
 @media (max-width: 700px) {
-  h1 { font-size: 44px; }
+  h1 { font-size: 40px; }
 
   .nav-links {
     position: fixed;
@@ -1131,6 +1131,7 @@ footer {
     text-align: left;
     z-index: 1000;
     transition: 0.4s;
+    overflow-y: auto;
   }
 
   .nav-links ul li { display: block; }
@@ -1143,7 +1144,30 @@ footer {
     cursor: pointer;
   }
 
+  .nav-links .fa-times {
+    display: block;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 20px 20px 0;
+  }
+
   .places-col1 { flex-basis: 100%; }
-  .locations iframe { height: 280px; }
+
+  .restaurant-map { height: 280px; }
+
+  .search-bar { width: 95%; }
+
+  .rowww { flex-direction: column; }
+
+  .route-card {
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .route-btn {
+    width: 100%;
+    justify-content: center;
+  }
 }
 </style>

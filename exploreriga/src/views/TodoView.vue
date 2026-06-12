@@ -703,6 +703,16 @@ footer {
     cursor: pointer;
   }
 
+  .nav-links .fa-times {
+    display: block;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 20px 20px 0;
+  }
+
+  .nav-links { overflow-y: auto; }
+
   .task-card { flex-wrap: wrap; }
   .input-card { flex-direction: column; }
   .add-btn { justify-content: center; }

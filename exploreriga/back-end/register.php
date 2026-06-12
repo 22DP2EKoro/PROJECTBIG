@@ -11,19 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
 }
 
-// Database connection
-$servername = "localhost";
-$username = "root"; // default username in XAMPP
-$password = "";     // default password is empty in XAMPP
-$dbname = "user_auth"; // Your database name
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+require_once __DIR__ . '/db.php';
 
 // Read the raw POST data
 $data = json_decode(file_get_contents("php://input"), true);

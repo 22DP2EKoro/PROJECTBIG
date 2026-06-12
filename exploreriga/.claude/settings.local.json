@@ -22,7 +22,8 @@
       "WebFetch(domain:en.wikipedia.org)",
       "WebFetch(domain:lv.wikipedia.org)",
       "WebFetch(domain:commons.wikimedia.org)",
-      "WebFetch(domain:www.wikidata.org)"
+      "WebFetch(domain:www.wikidata.org)",
+      "WebFetch(domain:www.pexels.com)"
     ]
   }
 }

@@ -12,10 +12,7 @@ try {
         echo json_encode(["error" => "Missing task id"]); exit;
     }
 
-    $conn = @new mysqli("localhost", "root", "", "user_auth");
-    if (!$conn || $conn->connect_error) {
-        echo json_encode(["error" => "DB connection failed"]); exit;
-    }
+    require_once __DIR__ . '/db.php';
 
     if (isset($data['name']) && isset($data['status'])) {
         $stmt = $conn->prepare("UPDATE user_tasks SET name = ?, status = ? WHERE id = ?");

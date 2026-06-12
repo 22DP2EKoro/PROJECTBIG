@@ -95,8 +95,8 @@ export default {
 
       try {
         const url = this.isRegistering
-          ? 'http://127.0.0.1/explore-riga/register.php'
-          : 'http://127.0.0.1/explore-riga/login.php'
+          ? '/api/register.php'
+          : '/api/login.php'
 
         const response = await axios.post(url, {
           email: this.email,

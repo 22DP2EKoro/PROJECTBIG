@@ -8,10 +8,7 @@ header("Content-Type: application/json");
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(200); exit; }
 
 try {
-    $conn = @new mysqli("localhost", "root", "", "user_auth");
-    if (!$conn || $conn->connect_error) {
-        echo json_encode(["error" => "DB connection failed: " . ($conn->connect_error ?? 'unknown')]); exit;
-    }
+    require_once __DIR__ . '/db.php';
 
     $conn->query("
       CREATE TABLE IF NOT EXISTS place_requests (

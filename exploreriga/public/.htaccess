@@ -1,0 +1,19 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Rewrite /api/* calls to /back-end/*
+  RewriteRule ^api/(.*)$ back-end/$1 [L]
+
+  # Never rewrite static assets
+  RewriteRule ^assets/.*$ - [L]
+  RewriteRule ^museums/.*$ - [L]
+  RewriteRule ^culture/.*$ - [L]
+  RewriteRule ^back-end/.*$ - [L]
+
+  # Vue Router — serve index.html for all non-file routes
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>

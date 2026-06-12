@@ -36,6 +36,20 @@
         <p>{{ t('home.heroSub') }}</p>
         <router-link to="/museums" class="hero-btn">{{ t('home.heroBtn') }} <i class="fa fa-arrow-right"></i></router-link>
       </div>
+
+      <div class="weather-widget" v-if="weather">
+        <div class="weather-icon"><i :class="'fa ' + weather.icon"></i></div>
+        <div class="weather-info">
+          <span class="weather-temp">{{ weather.temp }}°C</span>
+          <span class="weather-desc">{{ weather.desc }}</span>
+          <span class="weather-details">
+            <i class="fa fa-wind"></i> {{ weather.wind }} km/h
+            &nbsp;·&nbsp;
+            <i class="fa fa-droplet"></i> {{ weather.humidity }}%
+          </span>
+          <span class="weather-city">Rīga, Latvija</span>
+        </div>
+      </div>
     </section>
 
     <section class="karte">
@@ -46,6 +60,48 @@
           src="https://maps.google.com/maps?q=Riga+Latvia&t=&z=12&ie=UTF8&iwloc=&output=embed"
           width="100%" height="420" style="border:0; border-radius: 12px;" allowfullscreen loading="lazy">
         </iframe>
+      </div>
+    </section>
+
+    <!-- Weather forecast section -->
+    <section class="weather-section" v-if="weatherForecast">
+      <div class="weather-section-inner">
+        <h2>Laikapstākļi Rīgā</h2>
+        <div class="weather-main">
+          <div class="weather-current" v-if="weather">
+            <div class="wc-icon"><i :class="'fa ' + weather.icon"></i></div>
+            <div class="wc-info">
+              <div class="wc-temp">{{ weather.temp }}°C</div>
+              <div class="wc-desc">{{ weather.desc }}</div>
+              <div class="wc-stats">
+                <span><i class="fa fa-wind"></i> {{ weather.wind }} km/h</span>
+                <span><i class="fa fa-droplet"></i> {{ weather.humidity }}%</span>
+              </div>
+              <div class="wc-label">Tagad · Rīga</div>
+            </div>
+          </div>
+          <div class="weather-daily">
+            <div class="wd-card" v-for="day in weatherForecast.daily" :key="day.date">
+              <span class="wd-dayname">{{ day.dayName }}</span>
+              <i :class="'fa ' + day.icon"></i>
+              <span class="wd-high">{{ day.tempMax }}°</span>
+              <span class="wd-low">{{ day.tempMin }}°</span>
+              <span class="wd-precip" v-if="day.precip > 0"><i class="fa fa-droplet"></i> {{ day.precip }}%</span>
+              <span class="wd-precip" v-else>&nbsp;</span>
+            </div>
+          </div>
+        </div>
+        <div class="weather-hourly-wrap">
+          <div class="weather-hourly">
+            <div class="wh-item" v-for="hour in weatherForecast.hourly" :key="hour.time">
+              <span class="wh-time">{{ formatHour(hour.time) }}</span>
+              <i :class="'fa ' + (weatherDescriptions[hour.code] || { icon: 'fa-cloud' }).icon"></i>
+              <span class="wh-temp">{{ Math.round(hour.temp) }}°</span>
+              <span class="wh-precip" v-if="hour.precip > 0"><i class="fa fa-droplet"></i> {{ hour.precip }}%</span>
+              <span class="wh-precip" v-else>&nbsp;</span>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -213,6 +269,86 @@ const navVisible = ref(false)
 const auth = isAuthenticated
 const videoGrid = ref(null)
 let videoObserver = null
+const weather = ref(null)
+const weatherForecast = ref(null)
+
+const weatherDescriptions = {
+  0: { desc: 'Skaidrs', icon: 'fa-sun' },
+  1: { desc: 'Galvenokārt skaidrs', icon: 'fa-sun' },
+  2: { desc: 'Daļēji mākoņains', icon: 'fa-cloud-sun' },
+  3: { desc: 'Apmācies', icon: 'fa-cloud' },
+  45: { desc: 'Migla', icon: 'fa-smog' },
+  48: { desc: 'Migla', icon: 'fa-smog' },
+  51: { desc: 'Viegla smidzināšana', icon: 'fa-cloud-drizzle' },
+  53: { desc: 'Smidzināšana', icon: 'fa-cloud-drizzle' },
+  55: { desc: 'Stipra smidzināšana', icon: 'fa-cloud-drizzle' },
+  61: { desc: 'Viegls lietus', icon: 'fa-cloud-rain' },
+  63: { desc: 'Lietus', icon: 'fa-cloud-rain' },
+  65: { desc: 'Stiprs lietus', icon: 'fa-cloud-showers-heavy' },
+  71: { desc: 'Viegls sniegs', icon: 'fa-snowflake' },
+  73: { desc: 'Sniegs', icon: 'fa-snowflake' },
+  75: { desc: 'Stiprs sniegs', icon: 'fa-snowflake' },
+  80: { desc: 'Lietus gāzes', icon: 'fa-cloud-rain' },
+  81: { desc: 'Lietus gāzes', icon: 'fa-cloud-rain' },
+  82: { desc: 'Spēcīgas lietus gāzes', icon: 'fa-cloud-showers-heavy' },
+  95: { desc: 'Pērkona negaiss', icon: 'fa-bolt' },
+  96: { desc: 'Pērkona negaiss ar krusu', icon: 'fa-bolt' },
+  99: { desc: 'Pērkona negaiss ar krusu', icon: 'fa-bolt' },
+}
+
+function formatHour(timeStr) {
+  return timeStr.split('T')[1].slice(0, 5)
+}
+
+async function fetchWeather() {
+  try {
+    const res = await fetch(
+      'https://api.open-meteo.com/v1/forecast?latitude=56.9496&longitude=24.1052' +
+      '&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code' +
+      '&hourly=temperature_2m,weather_code,precipitation_probability' +
+      '&daily=temperature_2m_max,temperature_2m_min,weather_code,precipitation_probability_max' +
+      '&wind_speed_unit=kmh&timezone=Europe%2FRiga&forecast_days=7'
+    )
+    const data = await res.json()
+
+    const code = data.current.weather_code
+    const info = weatherDescriptions[code] || { desc: 'Nezināms', icon: 'fa-cloud' }
+    weather.value = {
+      temp: Math.round(data.current.temperature_2m),
+      humidity: data.current.relative_humidity_2m,
+      wind: Math.round(data.current.wind_speed_10m),
+      desc: info.desc,
+      icon: info.icon,
+    }
+
+    const nowStr = data.current.time
+    const startIdx = data.hourly.time.findIndex(t => t >= nowStr)
+    const hourly = data.hourly.time.slice(startIdx, startIdx + 24).map((t, i) => ({
+      time: t,
+      temp: data.hourly.temperature_2m[startIdx + i],
+      code: data.hourly.weather_code[startIdx + i],
+      precip: data.hourly.precipitation_probability[startIdx + i],
+    }))
+
+    const dayNames = ['Svētd.', 'Pirmd.', 'Otrd.', 'Tresd.', 'Ceturd.', 'Piektd.', 'Sestd.']
+    const daily = data.daily.time.map((date, i) => {
+      const d = new Date(date + 'T12:00')
+      const dayInfo = weatherDescriptions[data.daily.weather_code[i]] || { desc: 'Nezināms', icon: 'fa-cloud' }
+      return {
+        date,
+        dayName: i === 0 ? 'Šodien' : i === 1 ? 'Rītdien' : dayNames[d.getDay()],
+        tempMax: Math.round(data.daily.temperature_2m_max[i]),
+        tempMin: Math.round(data.daily.temperature_2m_min[i]),
+        icon: dayInfo.icon,
+        precip: data.daily.precipitation_probability_max[i],
+      }
+    })
+
+    weatherForecast.value = { hourly, daily }
+  } catch {
+    // silent fail
+  }
+}
 
 function toggleDropdown() { dropdownOpen.value = !dropdownOpen.value }
 function showMenu() { navVisible.value = true }
@@ -220,6 +356,8 @@ function hideMenu() { navVisible.value = false }
 function handleSignOut() { signOut() }
 
 onMounted(() => {
+  fetchWeather()
+
   window.addEventListener('click', (e) => {
     if (!e.target.classList.contains('dropbtn')) dropdownOpen.value = false
   })
@@ -328,7 +466,7 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
     url("https://goingbaltic.com/wp-content/uploads/2021/10/Latvia_Riga_-Blackheads-house_Saint-Peters-church_shutterstock_136863935-1.jpg");
   background-position: center;
   background-size: cover;
-  background-attachment: fixed;
+  background-attachment: scroll;
   position: relative;
 }
 
@@ -875,6 +1013,227 @@ footer { background: linear-gradient(135deg, #1a001a 0%, #2d003a 100%); color: #
 .dropdown-content a:hover { background: rgba(255,255,255,0.1); }
 .dropdown-content.show { display: block; opacity: 1; transform: translateY(0); }
 
+/* ── Weather section ── */
+.weather-section {
+  background: #f0f2f8;
+  padding: 70px 5%;
+}
+
+.dark-mode .weather-section { background: #0e0e1e; }
+
+.weather-section-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.weather-section h2 {
+  font-size: 36px;
+  color: #1a1a2e;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.dark-mode .weather-section h2 { color: #fff; }
+
+.weather-main {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  align-items: stretch;
+}
+
+.weather-current {
+  background: linear-gradient(135deg, #1a003d 0%, #3b053d 100%);
+  border-radius: 20px;
+  padding: 30px 26px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  min-width: 170px;
+  box-shadow: 0 4px 20px rgba(59,5,61,0.25);
+}
+
+.wc-icon .fa { font-size: 52px; }
+
+.wc-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+}
+
+.wc-temp {
+  font-size: 46px;
+  font-weight: 700;
+  line-height: 1;
+  font-family: 'Inter', sans-serif;
+}
+
+.wc-desc { font-size: 14px; color: rgba(255,255,255,0.8); }
+
+.wc-stats {
+  display: flex;
+  gap: 14px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.65);
+  margin-top: 6px;
+}
+
+.wc-label {
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
+
+.weather-daily {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.wd-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  flex: 1;
+  min-width: 90px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.wd-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(59,5,61,0.12); }
+
+.dark-mode .wd-card { background: #1e1e2e; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+
+.wd-dayname {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #888;
+}
+
+.wd-card .fa { font-size: 22px; color: #7b0d9b; }
+
+.wd-high { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+.dark-mode .wd-high { color: #fff; }
+
+.wd-low { font-size: 13px; color: #999; }
+
+.wd-precip { font-size: 11px; color: #5b9bd5; }
+
+/* Hourly strip */
+.weather-hourly-wrap {
+  background: #fff;
+  border-radius: 16px;
+  overflow-x: auto;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+}
+
+.dark-mode .weather-hourly-wrap { background: #1e1e2e; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+
+.weather-hourly {
+  display: flex;
+  padding: 14px 8px;
+  min-width: max-content;
+}
+
+.wh-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 14px;
+  border-right: 1px solid rgba(0,0,0,0.06);
+  min-width: 68px;
+}
+
+.dark-mode .wh-item { border-right-color: rgba(255,255,255,0.06); }
+.wh-item:last-child { border-right: none; }
+
+.wh-time {
+  font-size: 11px;
+  font-weight: 700;
+  color: #999;
+}
+
+.wh-item .fa { font-size: 17px; color: #7b0d9b; }
+
+.wh-temp { font-size: 16px; font-weight: 600; color: #1a1a2e; }
+.dark-mode .wh-temp { color: #fff; }
+
+.wh-precip { font-size: 10px; color: #5b9bd5; }
+
+/* ── Weather widget ── */
+.weather-widget {
+  position: absolute;
+  bottom: 36px;
+  left: 5%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 18px;
+  padding: 16px 24px;
+  color: #fff;
+  min-width: 230px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+}
+
+.weather-icon .fa {
+  font-size: 44px;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.25));
+}
+
+.weather-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.weather-temp {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+  font-family: 'Inter', sans-serif;
+}
+
+.weather-desc {
+  font-size: 13px;
+  color: rgba(255,255,255,0.85);
+}
+
+.weather-details {
+  font-size: 12px;
+  color: rgba(255,255,255,0.7);
+  margin-top: 5px;
+}
+
+.weather-city {
+  font-size: 10px;
+  color: rgba(255,255,255,0.5);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-top: 2px;
+}
+
 @media (max-width: 1024px) and (min-width: 701px) {
   .news-grid { grid-template-columns: repeat(2, 1fr); }
 }
@@ -889,10 +1248,12 @@ footer { background: linear-gradient(135deg, #1a001a 0%, #2d003a 100%); color: #
     position: fixed; background: #3b053d;
     height: 100vh; width: 240px; top: 0; right: -240px;
     text-align: left; z-index: 1000; transition: 0.4s;
+    overflow-y: auto;
   }
   .nav-links ul li { display: block; }
   .nav-links ul { padding: 30px 20px; }
   nav .fa-bars { display: block; color: #fff; font-size: 22px; cursor: pointer; }
+  .nav-links .fa-times { display: block; color: #fff; font-size: 22px; cursor: pointer; padding: 20px 20px 0; }
 
   .lang-switcher { gap: 3px; }
   .lang-switcher button { padding: 4px 7px; font-size: 10px; }
@@ -902,7 +1263,37 @@ footer { background: linear-gradient(135deg, #1a001a 0%, #2d003a 100%); color: #
   .join-text h2 { font-size: 28px; }
 
   .video-grid { flex-direction: column; }
+  .video-grid video { max-width: 100%; }
   .footer-inner { flex-direction: column; gap: 28px; }
   .news-grid { grid-template-columns: 1fr; }
+
+  .traveller-grid { gap: 14px; }
+  .traveller-card { width: calc(50% - 7px); padding: 22px 14px 18px; }
+
+  .join-actions { flex-direction: column; align-items: flex-start; gap: 14px; }
+
+  .weather-widget {
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: unset;
+    width: calc(100% - 40px);
+    max-width: 340px;
+  }
+
+  .weather-section { padding: 50px 5%; }
+  .weather-section h2 { font-size: 28px; margin-bottom: 24px; }
+  .weather-main { flex-direction: column; }
+  .weather-current {
+    flex-direction: row;
+    padding: 20px;
+    gap: 20px;
+    align-items: center;
+    min-width: unset;
+  }
+  .wc-icon .fa { font-size: 40px; }
+  .wc-info { align-items: flex-start; text-align: left; }
+  .wd-card { min-width: 78px; padding: 14px 8px; }
+  .wh-item { padding: 8px 10px; min-width: 58px; }
 }
 </style>

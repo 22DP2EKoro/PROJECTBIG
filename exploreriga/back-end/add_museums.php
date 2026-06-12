@@ -20,14 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-// Database connection
-$conn = new mysqli("localhost", "root", "", "user_auth");
-
-if ($conn->connect_error) {
-    http_response_code(500);
-    echo json_encode(["error" => "Database connection failed: " . $conn->connect_error]);
-    exit();
-}
+require_once __DIR__ . '/db.php';
 
 // Get JSON input
 $data = json_decode(file_get_contents("php://input"), true);

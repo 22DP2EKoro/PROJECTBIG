@@ -25,32 +25,21 @@ if ($rating < 1 || $rating > 5) {
     echo json_encode(["error" => "Rating must be between 1 and 5."]); exit;
 }
 
-// Saglabā JSON failā
-$file    = 'C:/Users/26420/OneDrive/Dokumenti/PROJECTBIG/exploreriga/back-end/reviews.json';
-$reviews = [];
-if (file_exists($file)) {
-    $reviews = json_decode(file_get_contents($file), true) ?? [];
-}
-$reviews[$type][$objectId][] = ['comment' => $comment, 'rating' => $rating];
-file_put_contents($file, json_encode($reviews, JSON_PRETTY_PRINT), LOCK_EX);
+require_once __DIR__ . '/db.php';
 
-// Saglabā datubāzē
-$conn = new mysqli("localhost", "root", "", "user_auth");
-if (!$conn->connect_error) {
-    $conn->query("CREATE TABLE IF NOT EXISTS reviews (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        type VARCHAR(20) NOT NULL,
-        object_id VARCHAR(50) NOT NULL,
-        comment TEXT NOT NULL,
-        rating TINYINT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )");
-    $stmt = $conn->prepare("INSERT INTO reviews (type, object_id, comment, rating) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("sssi", $type, $objectId, $comment, $rating);
-    $stmt->execute();
-    $stmt->close();
-    $conn->close();
-}
+$conn->query("CREATE TABLE IF NOT EXISTS reviews (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    type VARCHAR(20) NOT NULL,
+    object_id VARCHAR(50) NOT NULL,
+    comment TEXT NOT NULL,
+    rating TINYINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)");
+$stmt = $conn->prepare("INSERT INTO reviews (type, object_id, comment, rating) VALUES (?, ?, ?, ?)");
+$stmt->bind_param("sssi", $type, $objectId, $comment, $rating);
+$stmt->execute();
+$stmt->close();
+$conn->close();
 
 echo json_encode(["message" => "Review submitted successfully."]);
 ?>

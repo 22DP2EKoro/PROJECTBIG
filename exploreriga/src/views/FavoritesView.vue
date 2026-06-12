@@ -353,6 +353,7 @@ footer {
   .nav-links ul li { display: block; }
   .nav-links ul { padding: 30px 20px; }
   nav .fa-bars { display: block; color: #fff; font-size: 22px; cursor: pointer; }
-  .nav-links .fa-times { display: block; }
+  .nav-links .fa-times { display: block; color: #fff; font-size: 22px; cursor: pointer; padding: 20px 20px 0; }
+  .nav-links { overflow-y: auto; }
 }
 </style>

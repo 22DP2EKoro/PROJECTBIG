@@ -150,4 +150,33 @@ footer {
 .footer-content p { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
 .social-links a { color: rgba(255,255,255,0.7); text-decoration: none; margin: 0 10px; font-size: 14px; transition: color 0.2s; }
 .social-links a:hover { color: #e8a0e8; }
+
+@media (max-width: 600px) {
+  .contact-header {
+    padding: 80px 24px 40px;
+  }
+
+  .brand {
+    top: 18px;
+    left: 18px;
+    font-size: 1.1rem;
+  }
+
+  .contact-header h1 {
+    font-size: 34px;
+  }
+
+  .contact-info {
+    padding: 40px 5%;
+    gap: 16px;
+  }
+
+  .contact-item {
+    flex-basis: 100%;
+  }
+
+  .google-map iframe {
+    height: 280px;
+  }
+}
 </style>

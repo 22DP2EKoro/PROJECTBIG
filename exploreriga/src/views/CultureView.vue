@@ -265,7 +265,7 @@ export default {
           address: 'Barona iela 16/18, Rīga',
           facts: 'Katru gadu teātri apmeklē ap 100 000 skatītāju no Latvijas un ārzemēm.',
           image: '/culture/lellu.jpg',
-          link: 'https://www.puppet.lv/',
+          link: 'https://www.lelluteatris.lv/lv/',
           lat: 56.9473,
           lng: 24.1185,
         },
@@ -276,7 +276,7 @@ export default {
           address: 'Kalķu iela 16, Rīga',
           facts: 'Teātris regulāri uzaicina viesrežisorus no Eiropas un piedalās starptautiskos festivālos.',
           image: '/culture/krievu.jpg',
-          link: 'https://www.trd.lv/',
+          link: 'https://www.mct.lv/',
           lat: 56.9490,
           lng: 24.1095,
         },
@@ -309,7 +309,7 @@ export default {
           address: 'Amatu iela 6, Rīga',
           facts: 'Šeit regulāri uzstājas Latvijas Nacionālais simfoniskais orķestris un Latvijas Radio koris.',
           image: '/culture/filharmonija.jpg',
-          link: 'https://www.filharmonija.lv/',
+          link: 'https://www.lnso.lv/',
           lat: 56.9490,
           lng: 24.1050,
         },
@@ -320,7 +320,7 @@ export default {
           address: 'Ģertrūdes iela 101, Rīga, LV-1009',
           facts: 'Teātris ir ieguvis vairākas Latvijas teātra gada balvas par inovatīviem iestudējumiem.',
           image: 'https://images.unsplash.com/photo-1539964604210-db87088e0c2c?auto=format&fit=crop&w=640&h=400',
-          link: 'https://www.gerts.lv/',
+          link: 'https://git.lv/',
           lat: 56.9576,
           lng: 24.1321,
         },
@@ -342,7 +342,7 @@ export default {
           address: 'Dzirnavu iela 84/86, Rīga, LV-1011',
           facts: 'Katru sezonu piedāvā vairāk nekā 10 jauniestudējumu, aptverot gan klasiku, gan mūsdienu dramaturģiju.',
           image: 'https://images.unsplash.com/photo-1722321974501-059dff03e970?auto=format&fit=crop&w=640&h=400',
-          link: 'https://www.ljt.lv/',
+          link: 'https://www.facebook.com/jaunatnesteatris/',
           lat: 56.9520,
           lng: 24.1186,
         },
@@ -407,7 +407,7 @@ export default {
 
     hideMenu() {
       const navLinks = document.getElementById('navLinks')
-      if (navLinks) navLinks.style.right = '-200px'
+      if (navLinks) navLinks.style.right = '-240px'
     },
 
     toggleDropdown(event) {
@@ -695,7 +695,8 @@ p {
 .places-col {
   flex-basis: 35%;
   min-width: 240px;
-  align-self: stretch;
+  height: 280px;
+  flex-shrink: 0;
   overflow: hidden;
   position: relative;
 }
@@ -703,8 +704,8 @@ p {
 .places-col img {
   width: 100%;
   height: 100%;
-  min-height: 280px;
   object-fit: cover;
+  object-position: center;
   display: block;
   transition: transform 0.4s;
 }
@@ -1149,10 +1150,12 @@ footer {
   .places-col {
     flex-basis: 100%;
     min-width: unset;
+    width: 100%;
+    height: 220px;
   }
 
   .places-col img {
-    min-height: 220px;
+    width: 100%;
   }
 
   .text-box {
@@ -1160,7 +1163,7 @@ footer {
   }
 
   h1 {
-    font-size: 46px;
+    font-size: 40px;
   }
 
   .nav-links {
@@ -1173,6 +1176,7 @@ footer {
     text-align: left;
     z-index: 1000;
     transition: 0.4s;
+    overflow-y: auto;
   }
 
   .nav-links ul li {
@@ -1188,6 +1192,32 @@ footer {
     color: #fff;
     font-size: 22px;
     cursor: pointer;
+  }
+
+  .nav-links .fa-times {
+    display: block;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 20px 20px 0;
+  }
+
+  .route-card {
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .route-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .search-input {
+    width: 95%;
+  }
+
+  .culture-map {
+    height: 280px;
   }
 }
 </style>

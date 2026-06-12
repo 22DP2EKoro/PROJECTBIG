@@ -204,4 +204,29 @@ footer {
 }
 
 .social-links a:hover { color: #e8a0e8; }
+
+@media (max-width: 600px) {
+  .team-header {
+    padding: 80px 24px 40px;
+  }
+
+  .brand {
+    top: 18px;
+    left: 18px;
+    font-size: 1.1rem;
+  }
+
+  .team-header h1 {
+    font-size: 34px;
+  }
+
+  .team-section {
+    padding: 40px 5%;
+    gap: 20px;
+  }
+
+  .team-member {
+    flex-basis: 100%;
+  }
+}
 </style>

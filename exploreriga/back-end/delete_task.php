@@ -12,10 +12,7 @@ try {
         echo json_encode(["error" => "Missing task id"]); exit;
     }
 
-    $conn = @new mysqli("localhost", "root", "", "user_auth");
-    if (!$conn || $conn->connect_error) {
-        echo json_encode(["error" => "DB connection failed"]); exit;
-    }
+    require_once __DIR__ . '/db.php';
 
     $stmt = $conn->prepare("DELETE FROM user_tasks WHERE id = ?");
     if (!$stmt) { echo json_encode(["error" => "Prepare failed"]); exit; }

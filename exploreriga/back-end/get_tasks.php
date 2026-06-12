@@ -10,10 +10,7 @@ try {
     $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : 0;
     if (!$user_id) { echo json_encode(["error" => "Missing user_id"]); exit; }
 
-    $conn = @new mysqli("localhost", "root", "", "user_auth");
-    if (!$conn || $conn->connect_error) {
-        echo json_encode(["error" => "DB connection failed"]); exit;
-    }
+    require_once __DIR__ . '/db.php';
 
     $conn->query("CREATE TABLE IF NOT EXISTS user_tasks (
         id INT AUTO_INCREMENT PRIMARY KEY,
